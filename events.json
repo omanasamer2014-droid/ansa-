@@ -1,0 +1,19 @@
+[
+  {
+    "type": "select",
+    "payload": {
+      "name": "لوجو مميز 3",
+      "price": "299",
+      "category": "offers"
+    },
+    "time": "2025-12-30T18:31:45.128Z"
+  },
+  {
+    "type": "visit",
+    "payload": {
+      "page": "home",
+      "ip": "::1"
+    },
+    "time": "2025-12-30T18:29:03.833Z"
+  }
+]

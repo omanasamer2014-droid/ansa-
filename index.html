@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>logocraftsshop</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google AdSense -->
+<meta name="google-adsense-account" content="ca-pub-2365522771621709">
+<script async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2365522771621709"
+  crossorigin="anonymous"></script>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Tahoma,Arial;background:#f4f4f4;color:#222}
+
+/* Header */
+header{
+  position:fixed;top:0;width:100%;
+  background:#1e2b2f;color:#fff;
+  padding:14px 30px;
+  display:flex;justify-content:space-between;align-items:center;
+  z-index:1000;
+}
+header h1{margin:0;font-size:20px}
+nav a{color:#fff;text-decoration:none;margin:0 10px;font-size:14px;cursor:pointer}
+nav a:hover{color:#ff7a00}
+
+/* Sections */
+section{display:none}
+section.active{display:block}
+
+/* Hero */
+.hero{
+  height:90vh;
+  background:
+    linear-gradient(to left, rgba(255,255,255,.85), rgba(255,255,255,.1)),
+    url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1600&q=60");
+  background-size:cover;background-position:center;
+  display:flex;align-items:center;
+  padding:0 60px;
+}
+.hero-content{max-width:520px}
+.hero h2{font-size:36px;margin:0}
+.hero .line{width:60px;height:4px;background:#ff7a00;margin:15px 0}
+.hero p{font-size:16px;color:#444;line-height:1.8}
+
+/* Content */
+.content{padding:90px 20px 40px;max-width:1200px;margin:auto}
+h2{text-align:center;margin-bottom:5px}
+.line{width:45px;height:3px;background:#ff7a00;margin:10px auto 35px}
+
+/* Products */
+.products{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:22px;
+}
+.card{
+  background:#fff;border-radius:12px;
+  box-shadow:0 8px 25px rgba(0,0,0,.08);
+  overflow:hidden;text-align:center;transition:.3s
+}
+.card:hover{transform:translateY(-6px)}
+.card img{width:100%;height:220px;object-fit:cover}
+.card h3{margin:10px 0 5px;font-size:14px}
+.price{color:#ff7a00;font-weight:bold}
+.old{text-decoration:line-through;color:#999;font-size:12px}
+.btn{
+  display:inline-block;margin:15px 0;padding:9px 20px;
+  background:#1e2b2f;color:#fff;border-radius:25px;
+  text-decoration:none;font-size:13px;cursor:pointer
+}
+.btn:hover{background:#ff7a00}
+.whatsapp{background:#25D366}
+
+/* Footer */
+footer{background:#1e2b2f;color:#fff;text-align:center;padding:15px;margin-top:40px}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>logocraftsshop</h1>
+  <nav>
+    <a onclick="show('home')">الرئيسية</a>
+    <a onclick="show('offers')">التخفيضات</a>
+    <a onclick="show('new')">جديد</a>
+    <a onclick="show('golden')">الجولدن</a>
+    <a onclick="show('order')">اطلب</a>
+  </nav>
+</header>
+
+<section id="home" class="active">
+  <div class="hero">
+    <div class="hero-content">
+      <h2>مرحبًا بكم في تصميم الشعارات الإبداعي</h2>
+      <div class="line"></div>
+      <p>
+        نقدم تصميمات شعارات احترافية بجودة عالية تناسب جميع الأنشطة التجارية.
+        اختاري التصميم المناسب واطلبيه فورًا عبر واتساب.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="offers">
+  <div class="content">
+    <h2>التخفيضات</h2><div class="line"></div>
+    <div class="products" id="offersList"></div>
+  </div>
+</section>
+
+<section id="new">
+  <div class="content">
+    <h2>جديد</h2><div class="line"></div>
+    <div class="products" id="newList"></div>
+  </div>
+</section>
+
+<section id="golden">
+  <div class="content">
+    <h2>الجولدن</h2><div class="line"></div>
+    <div class="products" id="goldenList"></div>
+  </div>
+</section>
+
+<section id="order">
+  <div class="content">
+    <h2>اطلب</h2><div class="line"></div>
+    <p id="orderText" style="text-align:center;font-weight:bold"></p>
+    <a id="wa" class="btn whatsapp" target="_blank">التواصل عبر واتساب</a>
+  </div>
+</section>
+
+<footer>© 2025 logocraftsshop</footer>
+
+<script>
+// تسجيل زيارة
+fetch('/api/visit',{
+  method:'POST',
+  headers:{'Content-Type':'application/json'},
+  body: JSON.stringify({ page: 'home' })
+}).catch(()=>{});
+
+function show(id){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function order(name, price, category){
+  // تسجيل طلب
+  fetch('/api/select',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ name, price, category: category||'unknown' })
+  }).catch(()=>{});
+
+  show('order');
+  document.getElementById('orderText').innerText =
+    'المنتج المختار: '+name+' | السعر: '+price+' ج.م';
+
+  document.getElementById('wa').href =
+    'https://wa.me/201061104228?text=' +
+    encodeURIComponent('السلام عليكم، أريد طلب '+name+' بسعر '+price+' ج.م');
+}
+
+// منتجات تجريبية
+const offersPrices=[299,349,399], newPrices=[450,499,550], goldenPrices=[950,1100,1300];
+
+function card(name,price,img,old,cat){
+  return `
+  <div class="card">
+    <img src="${img}">
+    <h3>${name}</h3>
+    ${old?`<div class="old">${old} ج.م</div>`:''}
+    <div class="price">${price} ج.م</div>
+    <div class="btn" onclick="order('${name}','${price}','${cat}')">اطلب الآن</div>
+  </div>`;
+}
+
+for(let i=1;i<=10;i++){
+  offersList.insertAdjacentHTML('beforeend',
+    card(`لوجو مميز ${i}`,offersPrices[i%3],
+    `https://source.unsplash.com/400x400/?logo&sig=${i}`,offersPrices[i%3]+300,'offers'));
+}
+for(let i=1;i<=8;i++){
+  newList.insertAdjacentHTML('beforeend',
+    card(`لوجو جديد ${i}`,newPrices[i%3],
+    `https://source.unsplash.com/400x400/?branding&sig=${i+20}`,0,'new'));
+}
+for(let i=1;i<=6;i++){
+  goldenList.insertAdjacentHTML('beforeend',
+    card(`لوجو جولدن ${i}`,goldenPrices[i%3],
+    `https://source.unsplash.com/400x400/?luxury&sig=${i+40}`,0,'golden'));
+}
+</script>
+
+</body>
+</html>
